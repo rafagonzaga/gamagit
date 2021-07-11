@@ -1,11 +1,15 @@
 import React from 'react';
 import { Switch, Route, BrowserRouter } from 'react-router-dom';
 
-export default Routes(){
+import Repositories from './Repositories';
+import Home from './Home';
+
+export default function Routes() {
     return(
         <BrowserRouter>
             <Switch>
-                <Route path="./repositories" component=${Repositories} />
+                <Route path="/" exact component={Home} />
+                <Route path="/repositories" component={Repositories} />
             </Switch>
         </BrowserRouter>
     )
