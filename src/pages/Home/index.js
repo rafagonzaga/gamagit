@@ -6,8 +6,11 @@ import { useHistory } from 'react-router-dom';
 function App(props) {
   const history = useHistory();
   const [ usuario, setUsuario ] = useState('');
+  const [ erro, setErro ] = useState(false);
+
   function handlePesquisa() {
-    axios.get(`https://api.github.com/users/${usuario}/repos`).then(response => {
+    axios.get(`https://api.github.com/users/${usuario}/repos`)
+    .then(response => {
       const repositories = response.data;
       const repositoriesName = [];
       repositories.map((repository) =>{
@@ -15,16 +18,22 @@ function App(props) {
       })
       // console.log(repositoriesName);
       localStorage.setItem('repositoriesName', JSON.stringify(repositoriesName));
+      setErro(false);
       history.push('./repositories');
+    }).catch(err => {
+      setErro(true);
     });
   }
 
   return (
-    <S.Container>
-      {/* <p>{usuario}</p>   */}
-      <S.Input className='usuarioInput' placeholder='Usuario' value={usuario} onChange={e => setUsuario(e.target.value)}/>
-      <S.Button type="button" onClick={handlePesquisa}>Pesquisar</S.Button>
-    </S.Container>
+    <S.HomeContainer>
+      <S.Content>
+        <S.Input className='usuarioInput' placeholder='Usuario' value={usuario} onChange={e => setUsuario(e.target.value)}/>
+        <S.Button type="button" onClick={handlePesquisa}>Pesquisar</S.Button>        
+      </S.Content>
+      { erro ? <S.ErrorMsg>Ocorreu um erro. Tente novamente!</S.ErrorMsg> : '' } {/* Renderização condicional */}
+    </S.HomeContainer>
+    
   );
 }
 
